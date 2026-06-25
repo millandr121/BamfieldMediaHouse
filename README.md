@@ -1,44 +1,70 @@
-# Bamfield Media House Static Site
+# Bamfield Media House — Website
 
-This folder contains a redesigned, mobile-friendly static HTML version of `bamfieldmediahouse.ca` for Cloudflare Pages (or direct static hosting).
+The official website for **Bamfield Media House**, a community film & photography
+collective on Vancouver Island, BC. Local storytellers: analog filmmaking and
+photography workshops, documentary story pieces, and a fine art print shop —
+with a community darkroom trailer on the way.
 
-## Files
+Live site: <https://bamfieldmediahouse.ca>
 
-- `index.html` - main site
-- `assets/css/styles.css` - styles and responsive layout
-- `assets/js/main.js` - menu toggle, YouTube sound toggle
-- `media-manifest.json` - media URLs from the old live site (reference only)
-- `prepare-media.ps1` - (optional) legacy downloader (not required now that videos are removed)
+## What this is
 
-## Before Uploading
+A fast, single-page static website (plain HTML / CSS / JavaScript — no build step,
+no framework). It's an immersive, scroll-driven "motion graphic" experience:
 
-1. Open PowerShell in this folder.
-2. Run:
+- A film-leader **preloader** that loads everything before the experience starts
+- A full-screen **hero** with a looping background video and animated headline
+- **Who We Are**, **Workshops** (incl. the future darkroom trailer), **Print Shop**
+  (with an online order form), and **Contact** — all on one page
+- Scroll-reveal animations, parallax, film grain, and video clip slots that play
+  as they scroll into view
+- Quick-link navigation (top menu + side dots) to jump between sections
 
-```powershell
-.\prepare-media.ps1
+## Project structure
+
+```
+index.html              Whole site (markup + SEO + structured data)
+assets/css/styles.css   Cinematic theme, layout, animations
+assets/js/main.js       Preloader, scroll reveals, parallax, nav, forms
+assets/media/           Photos used across the site
+robots.txt              Search engine rules
+sitemap.xml             Page list for Google
+DEPLOY.md               How to deploy, add Analytics, and submit to Google
 ```
 
-3. (Optional) If you have ImageMagick installed (`magick` command), the script will also generate optimized `.webp` versions.
+## Editing the site
 
-## Landing video
+Everything is plain text — open the files in any editor.
+- **Text & sections:** edit `index.html`
+- **Colours, spacing, fonts:** edit `assets/css/styles.css` (see the `:root` variables at the top)
+- **Behaviour:** edit `assets/js/main.js`
 
-The hero background is a YouTube embed (muted autoplay). The "Play with sound" button opens YouTube in a new tab.
+To preview locally, just open `index.html` in a browser.
 
-## Print Shop order form submissions
+## Adding workshop / b-roll video clips
 
-The order form is included in `index.html`, but **static HTML cannot receive form submissions by itself**.
+Video files are intentionally **not** stored in this repo (they're large).
+The "story" and "past workshops" frames are `<video>` elements that currently
+show a poster photo. To make one play a clip, add a `<source>` inside it:
 
-This site uses Formspree:
+```html
+<video class="clip" muted loop playsinline preload="none" poster="assets/media/your-poster.jpg">
+  <source src="https://your-video-host/clip.mp4" type="video/mp4">
+</video>
+```
 
-- Print order form: `https://formspree.io/f/maqlvzbo`
-- Contact form: `https://formspree.io/f/xwvwyjqg`
+Recommended hosting for clips: **Cloudflare Stream**, YouTube/Vimeo (embed), or
+small optimized `.mp4` files (keep each under ~20 MB if placed in `assets/`).
+See `DEPLOY.md` for details.
 
-## Upload
+## Forms
 
-Upload the full folder contents to your Cloudflare static site target.
+The print order and contact forms submit through **Formspree** (static-friendly):
+- Print order: `https://formspree.io/f/maqlvzbo`
+- Contact: `https://formspree.io/f/xwvwyjqg`
 
-## Notes
+## Deployment & SEO
 
-- The site includes local media paths first.
-- Videos were intentionally removed from the upload to stay under a 25MB limit.
+This repo is set up to auto-deploy to **Cloudflare Pages** and is search-engine
+ready. Full step-by-step instructions (auto-deploy, Google Analytics, Google
+Search Console, sitemap, the www redirect) are in **[DEPLOY.md](DEPLOY.md)**.
