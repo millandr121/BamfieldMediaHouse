@@ -21,10 +21,10 @@
     document.body.classList.add("ready");
     if (preloader) preloader.classList.add("done");
     initReveals();
+    loadMedia(); // fetch drive manifest after site is ready
   }
 
   function runPreloader() {
-    // Count real image loads for a meaningful progress bar, with a hard fallback.
     const imgs = Array.from(document.images);
     let loaded = 0;
     const total = Math.max(imgs.length, 1);
@@ -35,7 +35,7 @@
     });
 
     let pct = 0;
-    const tick = setInterval(() => { // always creep forward so it never feels stuck
+    const tick = setInterval(() => {
       pct = Math.min(pct + 4, ((loaded / total) * 100) || 0, 100);
       setProgress(Math.max(pct, (loaded / total) * 100));
     }, 60);
@@ -43,9 +43,8 @@
     const finish = () => { clearInterval(tick); setProgress(100); setTimeout(startSite, 450); };
     if (loaded >= total) finish();
     else {
-      const done = () => finish();
-      window.addEventListener("load", done, { once: true });
-      setTimeout(done, 4000); // never hang longer than 4s
+      window.addEventListener("load", finish, { once: true });
+      setTimeout(finish, 4000);
     }
   }
 
@@ -53,21 +52,132 @@
   else runPreloader();
 
   /* ---------------- Scroll reveals ---------------- */
+  let revealObserver = null;
+
+  function observeReveal(el) {
+    if (prefersReduced || !revealObserver) { el.classList.add("in"); return; }
+    revealObserver.observe(el);
+  }
+
   function initReveals() {
     const items = document.querySelectorAll(".reveal");
     if (prefersReduced || !("IntersectionObserver" in window)) {
       items.forEach((el) => el.classList.add("in"));
       return;
     }
-    const io = new IntersectionObserver((entries) => {
+    revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add("in"); revealObserver.unobserve(e.target); }
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-    items.forEach((el) => io.observe(el));
+    items.forEach((el) => revealObserver.observe(el));
   }
 
-  /* ---------------- Header background on scroll + progress bar ---------------- */
+  /* ---------------- Manifest-driven media (drive.bamfieldmediahouse.ca) ---------------- */
+  const MANIFEST_URL = "https://drive.bamfieldmediahouse.ca/api/public/shares/EtSUasCjTAGRIR3zlnYb24k1/manifest";
+  const WEB_SAFE = ["image/jpeg", "image/png", "video/mp4"];
+
+  const WORKSHOP_CAPTIONS = [
+    "16mm production workshop",
+    "Learning the Bolex",
+    "Film, light, and patience",
+    "Editing workshop",
+    "On location, Vancouver Island",
+    "Community filmmaking"
+  ];
+
+  async function loadMedia() {
+    try {
+      const res = await fetch(MANIFEST_URL);
+      if (!res.ok) return;
+      const { files = [] } = await res.json();
+
+      const safe = files.filter((f) => WEB_SAFE.includes(f.contentType));
+      const arcPhotos = safe.filter((f) => /^ARC_/i.test(f.name) && f.contentType.startsWith("image/"));
+      const mp4s = safe.filter((f) => f.contentType === "video/mp4");
+
+      populateWorkshopReel(arcPhotos);
+      populateStoryClip(mp4s);
+    } catch (e) {
+      // fail silently — static fallbacks remain visible
+    }
+  }
+
+  function populateWorkshopReel(photos) {
+    const container = document.getElementById("workshop-reel");
+    if (!container || !photos.length) return;
+
+    container.innerHTML = "";
+    const show = photos.slice(0, 6);
+    show.forEach((f, i) => {
+      const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
+      const fig = document.createElement("figure");
+      fig.className = "frame reveal" + dir;
+      const img = document.createElement("img");
+      img.src = f.url;
+      img.alt = "16mm workshop, Bamfield BC";
+      img.loading = "lazy";
+      const cap = document.createElement("figcaption");
+      cap.textContent = WORKSHOP_CAPTIONS[i] || "Workshop session";
+      fig.appendChild(img);
+      fig.appendChild(cap);
+      container.appendChild(fig);
+      observeReveal(fig);
+    });
+
+    // If we have more than 6, add a second row
+    if (photos.length > 6) {
+      const row2 = document.createElement("div");
+      row2.className = "reel-track";
+      row2.style.marginTop = "1.2rem";
+      photos.slice(6).forEach((f, i) => {
+        const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
+        const fig = document.createElement("figure");
+        fig.className = "frame reveal" + dir;
+        const img = document.createElement("img");
+        img.src = f.url;
+        img.alt = "16mm workshop, Bamfield BC";
+        img.loading = "lazy";
+        const cap = document.createElement("figcaption");
+        cap.textContent = "Workshop session";
+        fig.appendChild(img);
+        fig.appendChild(cap);
+        row2.appendChild(fig);
+        observeReveal(fig);
+      });
+      container.parentElement.appendChild(row2);
+    }
+  }
+
+  function populateStoryClip(mp4s) {
+    const video = document.getElementById("story-clip");
+    if (!video || !mp4s.length) return;
+    // prefer "social export bamfield 1" or the first mp4
+    const pick = mp4s.find((f) => /social.*bamfield.*1/i.test(f.name)) || mp4s[0];
+    const src = document.createElement("source");
+    src.src = pick.url;
+    src.type = "video/mp4";
+    video.appendChild(src);
+    // register for auto play/pause now that it has a source
+    if (videoObserver) videoObserver.observe(video);
+  }
+
+  /* ---------------- Auto play/pause video clips in view ---------------- */
+  let videoObserver = null;
+  const clips = Array.from(document.querySelectorAll("video.clip"));
+  if ("IntersectionObserver" in window) {
+    videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target;
+        if (!v.querySelector("source")) return;
+        if (e.isIntersecting) { v.play().catch(() => {}); }
+        else { v.pause(); }
+      });
+    }, { threshold: 0.4 });
+    clips.forEach((v) => videoObserver.observe(v));
+  }
+
+  /* ---------------- Header + scroll progress bar ---------------- */
   const header = document.getElementById("site-header");
   const scrollBar = document.getElementById("scroll-bar");
   function onScroll() {
@@ -111,20 +221,6 @@
       });
     }, { threshold: 0.5 });
     sections.forEach((s) => spy.observe(s));
-  }
-
-  /* ---------------- Auto play/pause video clips in view ---------------- */
-  const clips = Array.from(document.querySelectorAll("video.clip"));
-  if (clips.length && "IntersectionObserver" in window) {
-    const vio = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        const v = e.target;
-        if (!v.querySelector("source")) return; // no source yet → just shows poster
-        if (e.isIntersecting) { v.play().catch(() => {}); }
-        else { v.pause(); }
-      });
-    }, { threshold: 0.4 });
-    clips.forEach((v) => vio.observe(v));
   }
 
   /* ---------------- Mobile menu ---------------- */

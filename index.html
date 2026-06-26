@@ -201,11 +201,10 @@
             </ul>
           </div>
 
-          <!-- Motion-graphic frame: BMH social reel clip -->
+          <!-- Motion-graphic frame: BMH social reel clip (source injected from manifest) -->
           <figure class="frame frame-tall reveal from-right">
-            <video class="clip" muted loop playsinline preload="none"
+            <video id="story-clip" class="clip" muted loop playsinline preload="none"
                    poster="assets/media/Still-2025-03-11-180737_1.7.1.jpg">
-              <source src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=social%20export%20bamfield%201.mp4" type="video/mp4">
             </video>
             <figcaption>Story piece · coastal regalia, shot on location</figcaption>
           </figure>
@@ -271,39 +270,23 @@
             <h3 class="display">Past workshops</h3>
             <p>Frames from recent 16mm sessions on the coast.</p>
           </div>
-          <div class="reel-track">
+          <!-- Photos populated dynamically from drive manifest (JS) -->
+          <div id="workshop-reel" class="reel-track">
+            <!-- Fallback frames shown until manifest loads -->
             <figure class="frame reveal from-left">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8375.jpg"
-                   alt="16mm workshop participants on location in Bamfield" loading="lazy">
+              <img src="assets/media/476390717_10227284953205027_3964863342104611329_n-e1741737810658.jpg"
+                   alt="16mm workshop on location in Bamfield" loading="lazy">
               <figcaption>16mm production workshop</figcaption>
             </figure>
             <figure class="frame reveal">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8410.jpg"
-                   alt="Workshop participants working with 16mm film equipment" loading="lazy">
+              <img src="assets/media/476803790_10227284940644713_1608657092914345065_n-copy-e1741746706510.jpg"
+                   alt="Workshop participants with film equipment" loading="lazy">
               <figcaption>Learning the Bolex</figcaption>
             </figure>
             <figure class="frame reveal from-right">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8440.jpg"
+              <img src="assets/media/MG_5751-1-scaled.jpg"
                    alt="16mm film workshop, Bamfield BC" loading="lazy">
               <figcaption>Film, light, and patience</figcaption>
-            </figure>
-          </div>
-          <!-- Second row of workshop frames -->
-          <div class="reel-track" style="margin-top:1.2rem">
-            <figure class="frame reveal from-left">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8385.jpg"
-                   alt="16mm editing workshop in Bamfield" loading="lazy">
-              <figcaption>Editing workshop</figcaption>
-            </figure>
-            <figure class="frame reveal">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8406.jpg"
-                   alt="Workshop participants with film equipment, Vancouver Island" loading="lazy">
-              <figcaption>On location, Vancouver Island</figcaption>
-            </figure>
-            <figure class="frame reveal from-right">
-              <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=ARC_8441.jpg"
-                   alt="16mm film workshop session, Bamfield Media House" loading="lazy">
-              <figcaption>Community filmmaking</figcaption>
             </figure>
           </div>
         </div>
