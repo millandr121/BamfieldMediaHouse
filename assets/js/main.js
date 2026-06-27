@@ -77,15 +77,6 @@
   const MANIFEST_URL = "https://drive.bamfieldmediahouse.ca/api/public/shares/EtSUasCjTAGRIR3zlnYb24k1/manifest";
   const WEB_SAFE = ["image/jpeg", "image/png", "video/mp4"];
 
-  const WORKSHOP_CAPTIONS = [
-    "16mm production workshop",
-    "Learning the Bolex",
-    "Film, light, and patience",
-    "Editing workshop",
-    "On location, Vancouver Island",
-    "Community filmmaking"
-  ];
-
   async function loadMedia() {
     try {
       const res = await fetch(MANIFEST_URL);
@@ -117,10 +108,7 @@
       img.src = f.url;
       img.alt = "16mm workshop, Bamfield BC";
       img.loading = "lazy";
-      const cap = document.createElement("figcaption");
-      cap.textContent = WORKSHOP_CAPTIONS[i] || "Workshop session";
       fig.appendChild(img);
-      fig.appendChild(cap);
       container.appendChild(fig);
       observeReveal(fig);
     });
@@ -138,10 +126,7 @@
         img.src = f.url;
         img.alt = "16mm workshop, Bamfield BC";
         img.loading = "lazy";
-        const cap = document.createElement("figcaption");
-        cap.textContent = "Workshop session";
         fig.appendChild(img);
-        fig.appendChild(cap);
         row2.appendChild(fig);
         observeReveal(fig);
       });
