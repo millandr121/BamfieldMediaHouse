@@ -201,12 +201,10 @@
             </ul>
           </div>
 
-          <!-- Motion-graphic frame: film still slides in -->
+          <!-- Motion-graphic frame: BMH social reel clip (source injected from manifest) -->
           <figure class="frame frame-tall reveal from-right">
-            <video class="clip" muted loop playsinline preload="none"
+            <video id="story-clip" class="clip" muted loop playsinline preload="none"
                    poster="assets/media/Still-2025-03-11-180737_1.7.1.jpg">
-              <!-- Drop a workshop / film clip here later, e.g.:
-              <source src="assets/video/story.mp4" type="video/mp4"> -->
             </video>
             <figcaption>Story piece · coastal regalia, shot on location</figcaption>
           </figure>
@@ -220,9 +218,9 @@
             <figcaption>On set · interview in the inlet</figcaption>
           </figure>
           <figure class="frame reveal">
-            <img src="assets/media/476803790_10227284940644713_1608657092914345065_n-copy-e1741746706510.jpg"
-                 alt="Behind the scenes: a camera operator setting up a monitor while talking with a participant" loading="lazy">
-            <figcaption>In the field · rolling</figcaption>
+            <img src="https://drive.bamfieldmediahouse.ca/s/3s8p5FVaVHLxMEpFvLwDmkj7/download?path=/&files=IMG_8886.JPG"
+                 alt="Bamfield Media House on location, coastal British Columbia" loading="lazy">
+            <figcaption>In the field · coastal BC</figcaption>
           </figure>
           <figure class="frame reveal from-right">
             <img src="assets/media/The-local-Gas-Bar-web-1-of-1.jpg"
@@ -248,51 +246,47 @@
         <div class="workshop-cards">
           <article class="ws-card reveal">
             <span class="ws-num">01</span>
-            <h3>Shooting 16mm</h3>
+            <h3>16mm Production</h3>
             <p>Load a Bolex, read light by hand, and shoot a roll of real motion-picture film. We cover exposure,
-              framing, and the discipline of making every frame count.</p>
+              framing, and the discipline of making every frame count when film is finite.</p>
           </article>
           <article class="ws-card reveal">
             <span class="ws-num">02</span>
-            <h3>Large-format &amp; film photography</h3>
-            <p>Slow down with view cameras and roll film. Composition, the zone of focus, and the craft of a
-              single, considered exposure.</p>
+            <h3>16mm Editing</h3>
+            <p>Cut real film on a flatbed. Learn how a story is built in the edit — pacing, rhythm, and the feel
+              of handling physical film instead of pixels.</p>
           </article>
           <article class="ws-card reveal">
             <span class="ws-num">03</span>
-            <h3>Story &amp; the moving image</h3>
-            <p>How a story piece comes together — from an idea on the coast to a finished, screened short. Editing,
-              sound, and finding the through-line.</p>
+            <h3>Post-production &amp; Finishing</h3>
+            <p>From the telecine to the final cut — colour, sound, and getting your 16mm work into a format the
+              world can actually see.</p>
           </article>
         </div>
 
-        <!-- Past workshops — clip / photo reel that animates in -->
+        <!-- Past workshops — photo reel from ARC_ workshop sessions -->
         <div class="reel">
           <div class="reel-head reveal">
             <h3 class="display">Past workshops</h3>
-            <p>Frames and clips from recent sessions on the coast.</p>
+            <p>Frames from recent 16mm sessions on the coast.</p>
           </div>
-          <div class="reel-track">
+          <!-- Photos populated dynamically from drive manifest (JS) -->
+          <div id="workshop-reel" class="reel-track">
+            <!-- Fallback frames shown until manifest loads -->
             <figure class="frame reveal from-left">
-              <video class="clip" muted loop playsinline preload="none"
-                     poster="assets/media/476390717_10227284953205027_3964863342104611329_n-e1741737810658.jpg">
-                <!-- <source src="assets/video/workshop-1.mp4" type="video/mp4"> -->
-              </video>
-              <figcaption>Documentary set workshop</figcaption>
+              <img src="assets/media/476390717_10227284953205027_3964863342104611329_n-e1741737810658.jpg"
+                   alt="16mm workshop on location in Bamfield" loading="lazy">
+              <figcaption>16mm production workshop</figcaption>
             </figure>
             <figure class="frame reveal">
-              <video class="clip" muted loop playsinline preload="none"
-                     poster="assets/media/MG_5751-1-scaled.jpg">
-                <!-- <source src="assets/video/workshop-2.mp4" type="video/mp4"> -->
-              </video>
-              <figcaption>Field photography day</figcaption>
+              <img src="assets/media/476803790_10227284940644713_1608657092914345065_n-copy-e1741746706510.jpg"
+                   alt="Workshop participants with film equipment" loading="lazy">
+              <figcaption>Learning the Bolex</figcaption>
             </figure>
             <figure class="frame reveal from-right">
-              <video class="clip" muted loop playsinline preload="none"
-                     poster="assets/media/IMG_1150-rotated.jpg">
-                <!-- <source src="assets/video/workshop-3.mp4" type="video/mp4"> -->
-              </video>
-              <figcaption>On location, Bamfield</figcaption>
+              <img src="assets/media/MG_5751-1-scaled.jpg"
+                   alt="16mm film workshop, Bamfield BC" loading="lazy">
+              <figcaption>Film, light, and patience</figcaption>
             </figure>
           </div>
         </div>
