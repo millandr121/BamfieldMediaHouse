@@ -215,7 +215,7 @@ body.ready .hero-title .line:nth-child(2) .word:nth-child(2) { animation-delay: 
 .price-table th, .price-table td { text-align: left; padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--line); }
 .price-table th { color: var(--amber); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .paper-list { margin: 0.8rem 0 0; padding-left: 1.1rem; color: var(--ink-dim); display: grid; gap: 0.3rem; }
-.order-cta { margin-top: 1.6rem; }
+.order-cta { margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
 .order-form-wrap { margin-top: 2.5rem; border: 1px solid var(--amber); padding: 2rem; background: var(--bg-3); }
 .is-hidden { display: none; }

@@ -99,7 +99,7 @@
     if (!container || !photos.length) return;
 
     container.innerHTML = "";
-    const show = photos.slice(0, 6);
+    const show = photos.slice(0, 4);
     show.forEach((f, i) => {
       const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
       const fig = document.createElement("figure");
@@ -112,26 +112,6 @@
       container.appendChild(fig);
       observeReveal(fig);
     });
-
-    // If we have more than 6, add a second row
-    if (photos.length > 6) {
-      const row2 = document.createElement("div");
-      row2.className = "reel-track";
-      row2.style.marginTop = "1.2rem";
-      photos.slice(6).forEach((f, i) => {
-        const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
-        const fig = document.createElement("figure");
-        fig.className = "frame reveal" + dir;
-        const img = document.createElement("img");
-        img.src = f.url;
-        img.alt = "16mm workshop, Bamfield BC";
-        img.loading = "lazy";
-        fig.appendChild(img);
-        row2.appendChild(fig);
-        observeReveal(fig);
-      });
-      container.parentElement.appendChild(row2);
-    }
   }
 
   function populateStoryClip(mp4s) {
