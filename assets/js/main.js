@@ -99,7 +99,7 @@
     if (!container || !photos.length) return;
 
     container.innerHTML = "";
-    const show = photos.slice(0, 4);
+    const show = photos.slice(0, 6);
     show.forEach((f, i) => {
       const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
       const fig = document.createElement("figure");
