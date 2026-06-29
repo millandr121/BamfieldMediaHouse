@@ -11,11 +11,35 @@ export default {
       return new Response("Bad request — expected JSON body", { status: 400 });
     }
 
-    const from    = payload.from    || "unknown sender";
-    const subject = payload.subject || "(no subject)";
-    const text    = payload.text    || "";
-    const html    = payload.html    || "";
-    const to      = Array.isArray(payload.to) ? payload.to[0] : (payload.to || "team@bamfieldmediahouse.ca");
+    // Resend wraps the event in { type, data: {...} }
+    const event = payload.data || payload;
+    const emailId = event.email_id;
+
+    // Webhook only carries metadata — the body must be fetched separately.
+    let from    = event.from    || "unknown sender";
+    let subject = event.subject || "(no subject)";
+    let to      = Array.isArray(event.to) ? event.to[0] : (event.to || "team@bamfieldmediahouse.ca");
+    let text    = "";
+    let html    = "";
+
+    // Fetch the full inbound email. NOTE: inbound emails live at
+    // /emails/receiving/{id}, NOT /emails/{id} (that's outbound only).
+    if (emailId) {
+      const full = await fetch(`https://api.resend.com/emails/receiving/${emailId}`, {
+        headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` },
+      });
+      if (full.ok) {
+        const email = await full.json();
+        text    = email.text    || text;
+        html    = email.html    || html;
+        from    = email.from    || from;
+        subject = email.subject || subject;
+        if (Array.isArray(email.to) && email.to.length) to = email.to[0];
+      } else {
+        const err = await full.text();
+        console.error("Receiving fetch error:", full.status, err);
+      }
+    }
 
     const forwardHeaderText =
       `---------- Forwarded message ----------\n` +
@@ -43,14 +67,14 @@ export default {
         to: ["andrewglennmiller@gmail.com"],
         reply_to: [from],
         subject: subject,
-        text: forwardHeaderText + text,
-        html: forwardHeaderHtml + (html || `<p>${escapeHtml(text)}</p>`),
+        text: forwardHeaderText + (text || "(no plain-text body)"),
+        html: forwardHeaderHtml + (html || `<pre>${escapeHtml(text || "(no body)")}</pre>`),
       }),
     });
 
     if (!res.ok) {
       const err = await res.text();
-      console.error("Resend API error:", res.status, err);
+      console.error("Resend send error:", res.status, err);
       return new Response("Forward failed", { status: 502 });
     }
 
