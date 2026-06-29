@@ -30,8 +30,9 @@ export default {
       });
       if (full.ok) {
         const email = await full.json();
-        text    = email.text    || text;
-        html    = email.html    || html;
+        const parsed = email.parsed || email;
+        text    = parsed.text || email.text || text;
+        html    = parsed.html || email.html || html;
         from    = email.from    || from;
         subject = email.subject || subject;
         if (Array.isArray(email.to) && email.to.length) to = email.to[0];
