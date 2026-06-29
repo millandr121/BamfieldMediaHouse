@@ -77,15 +77,6 @@
   const MANIFEST_URL = "https://drive.bamfieldmediahouse.ca/api/public/shares/EtSUasCjTAGRIR3zlnYb24k1/manifest";
   const WEB_SAFE = ["image/jpeg", "image/png", "video/mp4"];
 
-  const WORKSHOP_CAPTIONS = [
-    "16mm production workshop",
-    "Learning the Bolex",
-    "Film, light, and patience",
-    "Editing workshop",
-    "On location, Vancouver Island",
-    "Community filmmaking"
-  ];
-
   async function loadMedia() {
     try {
       const res = await fetch(MANIFEST_URL);
@@ -108,7 +99,7 @@
     if (!container || !photos.length) return;
 
     container.innerHTML = "";
-    const show = photos.slice(0, 6);
+    const show = photos.slice(0, 4);
     show.forEach((f, i) => {
       const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
       const fig = document.createElement("figure");
@@ -117,36 +108,10 @@
       img.src = f.url;
       img.alt = "16mm workshop, Bamfield BC";
       img.loading = "lazy";
-      const cap = document.createElement("figcaption");
-      cap.textContent = WORKSHOP_CAPTIONS[i] || "Workshop session";
       fig.appendChild(img);
-      fig.appendChild(cap);
       container.appendChild(fig);
       observeReveal(fig);
     });
-
-    // If we have more than 6, add a second row
-    if (photos.length > 6) {
-      const row2 = document.createElement("div");
-      row2.className = "reel-track";
-      row2.style.marginTop = "1.2rem";
-      photos.slice(6).forEach((f, i) => {
-        const dir = i % 3 === 0 ? " from-left" : i % 3 === 2 ? " from-right" : "";
-        const fig = document.createElement("figure");
-        fig.className = "frame reveal" + dir;
-        const img = document.createElement("img");
-        img.src = f.url;
-        img.alt = "16mm workshop, Bamfield BC";
-        img.loading = "lazy";
-        const cap = document.createElement("figcaption");
-        cap.textContent = "Workshop session";
-        fig.appendChild(img);
-        fig.appendChild(cap);
-        row2.appendChild(fig);
-        observeReveal(fig);
-      });
-      container.parentElement.appendChild(row2);
-    }
   }
 
   function populateStoryClip(mp4s) {
